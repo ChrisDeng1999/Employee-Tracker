@@ -5,7 +5,7 @@ VALUES (1, "Marketing"),
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES (1, "Manager", 100000, 1),
-       (2, "Worker", 70000, 2),
+       (2, "Engineer", 70000, 2),
        (3, "Intern", 30000, 3);
 
 
