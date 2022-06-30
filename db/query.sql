@@ -1,3 +1,4 @@
-USE workers_db;
-
 SELECT * FROM department;
+
+SELECT * FROM employee 
+JOIN role ON employee.role_id = role.id;

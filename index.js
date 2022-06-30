@@ -71,48 +71,16 @@ const db = mysql.createConnection(
       //function to view all employees
       function viewEmployee () {
         
-        function generateEmployeeList (id, name) {
-          this.id = id;
-          this.name = name;
-        }
-        var employees = new generateEmployeeList (1, "Chris Deng")
+        const sql = `SELECT id, first_name, last_name FROM employee`;
         
-        console.table([employees]);
-        
-        const array = [{myId: 42, name: 'John', color: 'red'}, {myId: 1337, name: 'Jane', color: 'blue'}]
-        
-        const transformed = array.reduce((acc, {myId, ...x}) => { acc[myId] = x; return acc}, {})
-        
-        console.table(transformed)
-        
-        const { Console } = require('console');
-        const { Transform } = require('stream');
-        
-        function table(input) {
-          // @see https://stackoverflow.com/a/67859384
-          const ts = new Transform({ transform(chunk, enc, cb) { cb(null, chunk) } })
-          const logger = new Console({ stdout: ts })
-          logger.table(input)
-          const table = (ts.read() || '').toString()
-          let result = '';
-          for (let row of table.split(/[\r\n]+/)) {
-            let r = row.replace(/[^┬]*┬/, '┌');
-            r = r.replace(/^├─*┼/, '├');
-            r = r.replace(/│[^│]*/, '');
-            r = r.replace(/^└─*┴/, '└');
-            r = r.replace(/'/g, ' ');
-            result += `${r}\n`;
+        db.query(sql, (err, rows) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.table(rows)
           }
-          console.log(result);
-        }
-        
-        const test = [
-          { id: '1', name: 'Chris Deng' },
-          { id: '2', name: 'John Adams' },
-          { id: '3', name: 'Michael Jordan' }
-        ];
-        
-        table(test);
+        });
+       
         
         startingQuestion ();
       }
@@ -138,7 +106,15 @@ const db = mysql.createConnection(
       //function to view all roles
       function viewRoles () {
         
+        const sql = `SELECT * FROM role`;
         
+        db.query(sql, (err, rows) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.table(rows)
+          }
+        });
         
         
         startingQuestion ();
@@ -156,7 +132,15 @@ const db = mysql.createConnection(
       //function to view all departments
       function viewDepartments() {
         
+        const sql = `SELECT * FROM department`;
         
+        db.query(sql, (err, rows) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.table(rows)
+          }
+        });
         
         
         startingQuestion ();
@@ -174,7 +158,9 @@ const db = mysql.createConnection(
     
     //function for when you select quit
     function finishPrompt () {
-      console.log ("You have successfully used this application! I hope you found everything you were looking for!")
+      console.log ("You have successfully used this application! I hope you found everything you were looking for!");
+      process.exit();
+      
     }
     
     
