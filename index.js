@@ -77,12 +77,12 @@ const db = mysql.createConnection(
           if (err) {
             console.log(err);
           } else {
+            console.log("\n")
             console.table(rows)
           }
+          console.log("\n")
+          startingQuestion ();
         });
-       
-        
-        startingQuestion ();
       }
       
       //function to add an employees
@@ -90,7 +90,7 @@ const db = mysql.createConnection(
         
         
         
-        
+        console.log("\n")
         startingQuestion ();
       }
       
@@ -99,25 +99,32 @@ const db = mysql.createConnection(
         
         
         
-        
+        console.log("\n")
         startingQuestion ();
       }
       
       //function to view all roles
       function viewRoles () {
         
-        const sql = `SELECT * FROM role`;
+        const sql = 
+        `SELECT role.id, role.title, department.name AS department, role.salary 
+        FROM role
+        JOIN department 
+        ON role.department_id = department.id;
+        `
+        ;
         
         db.query(sql, (err, rows) => {
           if (err) {
             console.log(err);
           } else {
+            console.log("\n")
             console.table(rows)
           }
+          console.log("\n")
+          startingQuestion ();
         });
         
-        
-        startingQuestion ();
       }
       
       //function to view add a role
@@ -125,7 +132,7 @@ const db = mysql.createConnection(
         
         
         
-        
+        console.log("\n")
         startingQuestion ();
       }
       
@@ -138,12 +145,12 @@ const db = mysql.createConnection(
           if (err) {
             console.log(err);
           } else {
+            console.log("\n")
             console.table(rows)
           }
+          console.log("\n")
+          startingQuestion ();
         });
-        
-        
-        startingQuestion ();
       }
       
       //function to view add a department
@@ -151,7 +158,7 @@ const db = mysql.createConnection(
         
         
         
-        
+        console.log("\n")
         startingQuestion ();
       }
     }
@@ -163,7 +170,7 @@ const db = mysql.createConnection(
       
     }
     
-    
+   
     startingQuestion ();
   }
   
