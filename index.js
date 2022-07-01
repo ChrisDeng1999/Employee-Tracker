@@ -156,12 +156,34 @@ const db = mysql.createConnection(
       //function to view add a department
       function addDepartments () {
         
-        
-        
         console.log("\n")
-        startingQuestion ();
-      }
+        inquirer
+        .prompt([
+          {
+            type: 'input',
+            name: 'departmentName',
+            message: 'What is the name of the department?',
+          },
+        ])
+        .then(answers => {
+          const sql = `INSERT INTO department (name)
+        VALUES (?)`;
+        const params = [answers.departmentName];
+
+        
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+          }
+         
+          startingQuestion ()
+        })
+        });
+      };
+      
     }
+    
     
     //function for when you select quit
     function finishPrompt () {
@@ -170,7 +192,7 @@ const db = mysql.createConnection(
       
     }
     
-   
+    
     startingQuestion ();
   }
   
