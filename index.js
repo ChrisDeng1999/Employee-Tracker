@@ -129,71 +129,118 @@ const db = mysql.createConnection(
       
       //function to view add a role
       function addRoles () {
-        
-        
-        
-        console.log("\n")
-        startingQuestion ();
-      }
-      
-      //function to view all departments
-      function viewDepartments() {
-        
-        const sql = `SELECT * FROM department`;
+        const sql = `SELECT id, name FROM department`;
+        let departmentChoices = []
+        let departmentChoicesId = []
         
         db.query(sql, (err, rows) => {
           if (err) {
             console.log(err);
-          } else {
-            console.log("\n")
-            console.table(rows)
-          }
-          console.log("\n")
-          startingQuestion ();
-        });
-      }
-      
-      //function to view add a department
-      function addDepartments () {
-        
-        console.log("\n")
-        inquirer
-        .prompt([
-          {
-            type: 'input',
-            name: 'departmentName',
-            message: 'What is the name of the department?',
-          },
-        ])
-        .then(answers => {
-          const sql = `INSERT INTO department (name)
-        VALUES (?)`;
-        const params = [answers.departmentName];
-
-        
-        db.query(sql, params, (err, result) => {
-          if (err) {
-            res.status(400).json({ error: err.message });
             return;
           }
-         
-          startingQuestion ()
-        })
+          console.log("success")
+          departmentChoices = rows
+          departmentChoicesId = departmentChoices.map(element => {
+            return {name: element.name,
+            value: element.id}
+          })
+          inquirer
+          .prompt([
+            {
+              type: 'input',
+              name: 'roleName',
+              message: 'What is the name of the role?',
+            },
+            {
+              type: 'input',
+              name: 'salary',
+              message: 'What is the salary of the role?',
+            },          {
+              type: 'list',
+              name: 'departmentChoice',
+              message: 'Which department does the role belong to?',
+              choices: departmentChoicesId
+            },
+          ])
+          .then(answers => {
+            const sql = `INSERT INTO role (title, salary, department_id)
+            VALUES (?, ?, ?)`;
+            console.log(answers);
+            const params = [answers.roleName, answers.salary, answers.departmentChoice];
+            
+            db.query(sql, params, (err, result) => {
+              if (err) {
+                console.log(err);
+                return;
+              }
+              
+              startingQuestion ()
+            })
+          });
         });
       };
       
-    }
-    
-    
-    //function for when you select quit
-    function finishPrompt () {
-      console.log ("You have successfully used this application! I hope you found everything you were looking for!");
-      process.exit();
       
+    
+    
+    //function to view all departments
+    function viewDepartments() {
+      
+      const sql = `SELECT * FROM department`;
+      
+      db.query(sql, (err, rows) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("\n")
+          console.table(rows)
+        }
+        console.log("\n")
+        startingQuestion ();
+      });
     }
     
+    //function to view add a department
+    function addDepartments () {
+      
+      console.log("\n")
+      inquirer
+      .prompt([
+        {
+          type: 'input',
+          name: 'departmentName',
+          message: 'What is the name of the department?',
+        },
+      ])
+      .then(answers => {
+        const sql = `INSERT INTO department (name)
+        VALUES (?)`;
+        const params = [answers.departmentName];
+        
+        
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          
+          startingQuestion ()
+        })
+      });
+    };
     
-    startingQuestion ();
   }
   
-  init()
+  
+  //function for when you select quit
+  function finishPrompt () {
+    console.log ("You have successfully used this application! I hope you found everything you were looking for!");
+    process.exit();
+    
+  }
+  
+  
+  startingQuestion ();
+}
+
+init()
