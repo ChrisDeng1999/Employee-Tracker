@@ -99,7 +99,7 @@ const db = mysql.createConnection(
       //function to add an employees
       function addEmployee () {
         const sql = `
-        SELECT employee.id AS empId, employee.manager_id, employee.first_name, employee.last_name, role.title, role.id AS roleId FROM employee
+        SELECT employee.id, first_name, last_name, title, role.id FROM employee
         JOIN role ON employee.role_id = role.id; `;
          
         let roleChoices = []
@@ -109,6 +109,8 @@ const db = mysql.createConnection(
         let managerChoicesId = []
         
         db.query(sql, (err, rows) => {
+          console.log(rows);
+
           if (err) {
             console.log(err);
             return;
@@ -116,12 +118,12 @@ const db = mysql.createConnection(
           roleChoices = rows
           roleChoicesId = roleChoices.map(element => {
             return {name: element.title,
-              value: element.RoleID}
+              value: element.id}
             })
           managerChoices = rows
           managerChoicesId = managerChoices.map(element => {
-            return {name: CONCAT(element.first_name, ' ', element.last_name),
-              value: element.manager_id}
+            return {name: `${element.first_name} ${element.last_name}`,
+              value: element.id}
             })
             inquirer
             .prompt([
@@ -149,7 +151,7 @@ const db = mysql.createConnection(
               },
             ])
             .then(answers => {
-              const sql = `INSERT INTO role (employee.id, employee.manager_id, employee.first_name, employee.last_name, role.title, role.id)
+              const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
               VALUES (?, ?, ?, ?)`;
               console.log(answers);
               const params = [answers.firstName, answers.lastName, answers.roleChoice, answers.managerChoice];
