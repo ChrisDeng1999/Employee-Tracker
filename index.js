@@ -111,6 +111,11 @@ const db = mysql.createConnection(
         const sql = `
         SELECT employee.id, first_name, last_name, title, role.id FROM employee
         JOIN role ON employee.role_id = role.id; `;
+
+        const sql2 = `
+        SELECT id, title
+        FROM role;
+        `;
      
         let roleChoices = []
         let roleChoicesId = []
@@ -119,23 +124,27 @@ const db = mysql.createConnection(
         let managerChoicesId = []
         
         db.query(sql, (err, rows) => {
-          console.log(rows);
-
           if (err) {
             console.log(err);
             return;
           }
-          roleChoices = rows
-          roleChoicesId = roleChoices.map(element => {
-            return {name: element.title,
-              value: element.id}
-            })
           managerChoices = rows
           managerChoicesId = managerChoices.map(element => {
             return {name: `${element.first_name} ${element.last_name}`,
               value: element.id}
             })
           managerChoicesId.unshift({name:"none", value:null});
+          db.query(sql2, (err, rows) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+          
+          roleChoices = rows
+          roleChoicesId = roleChoices.map(element => {
+            return {name: element.title,
+              value: element.id}
+            })
             inquirer
             .prompt([
               {
@@ -164,7 +173,6 @@ const db = mysql.createConnection(
             .then(answers => {
               const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
               VALUES (?, ?, ?, ?)`;
-              console.log(answers);
               const params = [answers.firstName, answers.lastName, answers.roleChoice, answers.managerChoice];
               
               db.query(sql, params, (err, result) => {
@@ -177,7 +185,8 @@ const db = mysql.createConnection(
               })
             });
           });
-        }
+        });
+      }
         
         //function to update an employees
         function updateEmployee () {
