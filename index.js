@@ -135,6 +135,7 @@ const db = mysql.createConnection(
             return {name: `${element.first_name} ${element.last_name}`,
               value: element.id}
             })
+          managerChoicesId.unshift({name:"none", value:null});
             inquirer
             .prompt([
               {
@@ -181,17 +182,27 @@ const db = mysql.createConnection(
         //function to update an employees
         function updateEmployee () {
 
-          const sql = `SELECT id, title FROM role `;
+          const sql = `
+          SELECT employee.id, first_name, last_name, title, role.id 
+          FROM employee
+          JOIN role ON employee.role_id = role.id;`;
           let roleChoices = []
           let roleChoicesId = []
+
+          let employeeChoices = []
+          let employeeChoicesId = []
           
           db.query(sql, (err, rows) => {
             if (err) {
               console.log(err);
               return;
             }
+            employeeChoices = rows
+            employeeChoicesId = employeeChoices.map(element => {
+                return {name: `${element.first_name} ${element.last_name}`,
+                  value: element.id}
+              })
             roleChoices = rows
-            console.log(rows);
             roleChoicesId = roleChoices.map(element => {
               return {name: element.title,
                 value: element.id}
@@ -212,10 +223,10 @@ const db = mysql.createConnection(
                 },
               ])
               .then(answers => {
-                const sql = `UPDATE `;
-                console.log(answers);
-                const params = [answers.roleName, answers.salary, answers.departmentChoice];
-                
+                const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+               
+                const params = [answers.roleChoice, answers.employeeName];
+              
                 db.query(sql, params, (err, result) => {
                   if (err) {
                     console.log(err);
