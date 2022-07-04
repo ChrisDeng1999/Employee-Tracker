@@ -6,9 +6,6 @@ const inquirer = require("inquirer")
 const logo = require('asciiart-logo');
 
 
-
-
-
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -79,6 +76,7 @@ const db = mysql.createConnection(
           break;
         }
       });
+      
       //function to view all employees
       function viewEmployee () {
         
@@ -324,10 +322,7 @@ const db = mysql.createConnection(
               });
             });
           };
-          
-          
-          
-          
+
           //function to view all departments
           function viewDepartments() {
             
@@ -376,14 +371,12 @@ const db = mysql.createConnection(
           
         }
         
-        
         //function for when you select quit
         function finishPrompt () {
           console.log ("You have successfully closed this application! I hope you have a great day!");
           process.exit();
           
         }
-        
         
         startingQuestion ();
       }
