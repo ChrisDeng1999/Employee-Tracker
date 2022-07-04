@@ -306,7 +306,6 @@ const db = mysql.createConnection(
               .then(answers => {
                 const sql = `INSERT INTO role (title, salary, department_id)
                 VALUES (?, ?, ?)`;
-                console.log(answers);
                 const params = [answers.roleName, answers.salary, answers.departmentChoice];
                 
                 db.query(sql, params, (err, result) => {

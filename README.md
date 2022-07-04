@@ -16,7 +16,7 @@ Once you have installed the application, you will have to type node index.js in 
 
 Below is a link to a quick video that goes over what the application can do!
 
-
+https://www.loom.com/share/554419f655ff4d81ac2ff11d3a2b2525
 
 ## Questions
 
