@@ -282,10 +282,8 @@ const db = mysql.createConnection(
               return;
             }
             departmentChoices = rows
-            console.log(rows);
             departmentChoicesId = departmentChoices.map(element => {
-              return {name: element.name,
-                value: element.id}
+              return {name: element.name, value: element.id}
               })
               inquirer
               .prompt([
